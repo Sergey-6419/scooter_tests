@@ -1,0 +1,36 @@
+scooter_rent=# ^C
+scooter_rent=# \d "Couriers"
+scooter_rent=# SELECT c."login",
+scooter_rent-#        COUNT(o."id") AS orders_count
+scooter_rent-# FROM "Couriers" c
+scooter_rent-# JOIN "Orders" o
+scooter_rent-#   ON o."courierId" = c."id"
+scooter_rent-# WHERE o."inDelivery" = true
+scooter_rent-# GROUP BY c."login"
+scooter_rent-# ORDER BY orders_count DESC;
+  login   | orders_count
+----------+--------------
+ ninja    |            2
+ ninja123 |            2
+(2 rows)
+
+scooter_rent=# ^C
+scooter_rent=# SELECT
+scooter_rent-#     "track",
+scooter_rent-#     CASE
+scooter_rent-#         WHEN "finished" = true THEN 2
+scooter_rent-#         WHEN "cancelled" = true THEN -1
+scooter_rent-#         WHEN "inDelivery" = true THEN 1
+scooter_rent-#         ELSE 0
+scooter_rent-#     END AS status
+scooter_rent-# FROM "Orders"
+scooter_rent-# ORDER BY "track";
+ track  | status
+--------+--------
+ 914573 |      1
+ 914573 |      1
+ 933592 |      1
+ 933592 |      1
+(4 rows)
+
+scooter_rent=#
